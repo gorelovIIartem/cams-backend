@@ -3,6 +3,7 @@ using BLL.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WebApi.Configuration;
 using WebApi.StartupConfigurations.Interfaces;
 
 namespace WebApi.StartupConfigurations
@@ -15,7 +16,8 @@ namespace WebApi.StartupConfigurations
 
             var mc = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new MapperSettings());
+                mc.AddProfile(new WebApiMapperSettings());
+                mc.AddProfile(new BLLMapperSettings());
             });
             var mapper = mc.CreateMapper();
             services.AddSingleton(mapper);
