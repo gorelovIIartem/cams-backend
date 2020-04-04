@@ -5,7 +5,6 @@ namespace DAL.Interfaces
 {
     public interface IUnitOfWork
     {
-        IDeviceGroupRepository DeviceGroupRepository { get; }
         IDeviceLogRepository DeviceLogRepository { get; }
         IDeviceRepository DeviceRepository { get; }
         IDeviceRuleRepository DeviceRuleRepository { get; }

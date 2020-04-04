@@ -13,7 +13,6 @@ namespace DAL.ApplicationDbContext
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<DeviceLog> DeviceLogs { get; set; }
         public DbSet<Device> Devices { get; set; }
-        public DbSet<DeviceGroup> DeviceGroups { get; set; }
         public DbSet<DeviceRule> DeviceRules { get; set; }
         public DbSet<LogType> LogTypes { get; set; }
         public DbSet<Rule> Rules { get; set; }
@@ -30,7 +29,6 @@ namespace DAL.ApplicationDbContext
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new DeviceConfiguration());
-            builder.ApplyConfiguration(new DeviceGroupConfiguration());
             builder.ApplyConfiguration(new DeviceLogConfiguration());
             builder.ApplyConfiguration(new DeviceRuleConfiguration());
             builder.ApplyConfiguration(new GroupConfiguration());

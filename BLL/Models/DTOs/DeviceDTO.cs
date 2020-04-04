@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using DAL.Helpers.Enums;
+using System.Text;
 
-namespace DAL.Models
+namespace BLL.Models.DTOs
 {
-    public class Device
+    public class DeviceDTO
     {
         public int DeviceId { get; set; }
         public string DeviceName { get; set; }
@@ -17,9 +17,5 @@ namespace DAL.Models
         public string DeviceSettings { get; set; }
         public DateTime CreationDate { get; set; }
         public string UserId { get; set; }
-        public  User User { get; set; }
-        public  DeviceType DeviceType { get; set; }
-        public  ICollection<DeviceLog> DeviceLogs { get; set; }
-        public  ICollection<DeviceRule> DeviceRules { get; set; }
     }
 }

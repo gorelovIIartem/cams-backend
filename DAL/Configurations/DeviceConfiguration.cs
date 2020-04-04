@@ -12,7 +12,7 @@ namespace DAL.Configurations
         {
             builder.HasKey(p => p.DeviceId);
             builder.Property(p => p.DeviceType).HasConversion(p => p.ToString(), p => (DeviceType)Enum.Parse(typeof(DeviceType), p));
-            builder.HasMany(p => p.DeviceLogs).WithOne(p => p.Device).HasForeignKey(p => p.LogId);
+            builder.HasMany(p => p.DeviceLogs).WithOne(p => p.Device).HasForeignKey(p => p.DeviceId);
         }
     }
 }

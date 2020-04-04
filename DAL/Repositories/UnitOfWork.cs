@@ -11,7 +11,7 @@ namespace DAL.Repositories
     {
         private readonly DbContext _context;
 
-        private IDeviceGroupRepository _deviceGroupRepository;
+
         private IDeviceLogRepository _deviceLogRepository;
         private IDeviceRepository _deviceRepository;
         private IDeviceRuleRepository _deviceRulerepository;
@@ -23,16 +23,6 @@ namespace DAL.Repositories
         public UnitOfWork(DbContext dbContext)
         {
             _context = dbContext;
-        }
-
-        public IDeviceGroupRepository DeviceGroupRepository
-        {
-            get
-            {
-                if (_deviceGroupRepository == null)
-                    _deviceGroupRepository = new DeviceGroupRepository(_context);
-                return _deviceGroupRepository;
-            }
         }
 
         public IDeviceLogRepository DeviceLogRepository
@@ -107,7 +97,15 @@ namespace DAL.Repositories
 
         public async Task SaveAsync()
         {
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+           // await _context.SaveChangesAsync();
+           catch(Exception ex)
+            {
+
+            }
         }
 
         public bool disposedValue = false;
