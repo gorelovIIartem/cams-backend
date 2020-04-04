@@ -13,5 +13,6 @@ namespace BLL.Interfaces.DTOInterfaces
         Task<ICollection<DeviceLogDTO>> GetSortedLogsByDeviceId(int deviceId);
         Task<ICollection<DeviceLogDTO>> GetSortedLogsByDeviceIdAndDaterange(int deviceId, DateTime startDate, DateTime finishDate);
         Task<OperationDetails> RemoveAllLogsSortedByDeviceId(int deviceId);
+        Task<byte[]> GenerateReport(int deviceId);
     }
 }

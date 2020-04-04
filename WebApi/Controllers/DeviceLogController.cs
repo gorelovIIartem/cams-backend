@@ -4,6 +4,7 @@ using BLL.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using WebApi.Models.ViewModels;
 
@@ -54,6 +55,17 @@ namespace WebApi.Controllers
         {
             var operationDetails = await _deviceLogService.RemoveAllLogsSortedByDeviceId(deviceId);
             return Ok(operationDetails);
+        }
+
+        [HttpGet]
+        [Route(WebApiRoutes.DeviceLog.Report)]
+        public async Task<HttpResponseMessage> GenerateExcelReport(int deviceId)
+        {
+            HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            responseMessage.Content = new ByteArrayContent(await _deviceLogService.GenerateReport(deviceId));
+            responseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment") { FileName = "DeviceLog.xlsx" };
+            responseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.speadsheetml.sheet");
+            return responseMessage;
         }
     }
 }

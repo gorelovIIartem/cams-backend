@@ -4,8 +4,11 @@ using BLL.Interfaces.DTOInterfaces;
 using BLL.Models.DTOs;
 using DAL.Interfaces;
 using DAL.Models;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -77,6 +80,69 @@ namespace BLL.Services.DTOServices
             ICollection<DeviceLog> sortedLogs = await _dataBase.DeviceLogRepository.GetAllIncludingAsync(p => p.DeviceId == deviceId);
             _dataBase.DeviceLogRepository.DeleteSeveral(sortedLogs);
             return new OperationDetails(true, $"Logs for {deviceId.ToString()} removed.", $"Target device - {deviceId.ToString()}");
+        }
+
+        public async Task<byte[]> GenerateReport(int deviceId)
+        {
+            List<DeviceLog> deviceLogs =(await _dataBase.DeviceLogRepository.GetWhereAsync(p => p.DeviceId == deviceId)).ToList();
+            List<string> logTypeNames = new List<string>();
+            foreach (var log in deviceLogs)
+            {
+                logTypeNames.Add(GetLogTypeName(log.DeviceId));
+            }
+            ExcelFill fill;
+            Border border;
+            int firstRaw = 1;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (ExcelPackage excelPackage = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add($"Device Information Report");
+                ExcelRange excelRange = worksheet.Cells[$"A{firstRaw}:F{deviceLogs.Count() + firstRaw}"];
+                excelPackage.Workbook.Properties.Created = DateTime.Now;
+
+                excelRange.Style.Font.Bold = true;
+                excelRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                excelRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                fill = excelRange.Style.Fill;
+                fill.PatternType = ExcelFillStyle.Solid;
+                fill.BackgroundColor.SetColor(Color.White);
+                border = excelRange.Style.Border;
+                border.Bottom.Style = border.Top.Style = border.Left.Style = border.Right.Style = ExcelBorderStyle.Thin;
+
+                excelRange = worksheet.Cells["A1"];
+                excelRange.Value = "Log Id";
+                excelRange = worksheet.Cells["B1"];
+                excelRange.Value = "Log type";
+                excelRange = worksheet.Cells["C1"];
+                excelRange.Value = "Device Id";
+                excelRange = worksheet.Cells["D1"];
+                excelRange.Value = "Message";
+                excelRange = worksheet.Cells["E1"];
+                excelRange.Value = "Creation Date";
+
+                for (int i = firstRaw + 1; i < deviceLogs.Count() + 1; i++)
+                {
+
+                    excelRange = worksheet.Cells[$"A{i}"];
+                    excelRange.Value = deviceLogs[i - (firstRaw + 1)].LogId;
+                    excelRange = worksheet.Cells[$"B{i}"];
+                    excelRange.Value = logTypeNames[i - (firstRaw + 1)];
+                    excelRange = worksheet.Cells[$"C{i}"];
+                    excelRange.Value = deviceLogs[i - (firstRaw + 1)].DeviceId;
+                    excelRange = worksheet.Cells[$"D{i}"];
+                    excelRange.Value = deviceLogs[i - (firstRaw + 1)].Message;
+                    excelRange = worksheet.Cells[$"E{i}"];
+                    excelRange.Value = deviceLogs[i - (firstRaw + 1)].CreationDate;
+                }
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                return await excelPackage.GetAsByteArrayAsync();
+            }
+
+        }
+
+        private string GetLogTypeName(int logTypeId)
+        {
+            return Enum.GetName(typeof(DAL.Helpers.Enums.LogType), logTypeId);
         }
     }
 }
