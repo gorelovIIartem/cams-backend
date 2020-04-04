@@ -4,13 +4,13 @@ using DAL.Models;
 
 namespace BLL.Configuration
 {
-    public class MapperSettings : Profile
+    public class BLLMapperSettings : Profile
     {
-        public MapperSettings()
+        public BLLMapperSettings()
         {
             CreateMap<DeviceLogDTO, DeviceLog>().ReverseMap();
-            CreateMap<GroupDTO, Group>().ReverseMap();
             CreateMap<RuleDTO, Rule>().ReverseMap();
+            CreateMap<DeviceDTO, Device>().ReverseMap();
         }
     }
 }
