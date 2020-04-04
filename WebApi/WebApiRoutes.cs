@@ -17,6 +17,12 @@
         {
             public const string Create = "api/DeviceLog";
             public const string SortedLogs = "api/DeviceLog";
+            public const string Report = "api/DeviceLog/{deviceId:int}/create-report";
+        }
+
+        public class Device
+        {
+            public const string Create = "api/Device";
         }
     }
 }

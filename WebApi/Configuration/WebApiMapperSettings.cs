@@ -2,14 +2,15 @@
 using BLL.Models.DTOs;
 using WebApi.Models.ViewModels;
 
-namespace BLL.Configuration
+namespace WebApi.Configuration
 {
-    public class MapperSettings : Profile
+    public class WebApiMapperSettings : Profile
     {
-        public MapperSettings()
+        public WebApiMapperSettings()
         {
             CreateMap<DeviceLogModel, DeviceLogDTO>().ReverseMap();
             CreateMap<RuleModel, RuleDTO>().ReverseMap();
+            CreateMap<DeviceModel, DeviceDTO>().ReverseMap();
         }
     }
 }
